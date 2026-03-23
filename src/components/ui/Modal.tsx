@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { TUSER } from '../../types/typeUser';
 import { useAppDispatch } from '../../redux/hook';
 import { createNewUser } from '../../redux/user/user.slice';
+import { toast } from 'react-toastify';
 
 type TProp = {
   user?: TUSER;
@@ -22,7 +23,8 @@ const MyModal: React.FC<TProp> = ({
   isDelete,
 }) => {
   const dispatch = useAppDispatch();
-  const handelSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries()) as {
@@ -36,7 +38,13 @@ const MyModal: React.FC<TProp> = ({
     if (isEdit) {
       return;
     }
-    dispatch(createNewUser(data));
+    try {
+      await dispatch(createNewUser(data)).unwrap();
+      toast.success('Create new success');
+      handleClose();
+    } catch {
+      toast.error('Tạo user thất bại!');
+    }
   };
   let title = 'Add new user';
   let contentBtn = 'Sign in';
@@ -53,6 +61,7 @@ const MyModal: React.FC<TProp> = ({
   }
   return (
     <Modal
+      key={user?.id}
       show={isOpen}
       onHide={handleClose}
       backdrop="static"

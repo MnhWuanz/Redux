@@ -3,6 +3,7 @@ import { TUSER } from '../../types/typeUser';
 
 const initialState = {
   listUser: [] as TUSER[],
+  isCreaeSuccess: false,
 };
 export const fetchListUser = createAsyncThunk(
   'users/fetchListUser',
@@ -29,7 +30,9 @@ export const createNewUser = createAsyncThunk(
       },
     });
     const data = await response.json();
-    console.log('Check data res:', data);
+    if (data && data.id) {
+      thunkAPI.dispatch(fetchListUser());
+    }
     return data as TUSER[];
   },
 );
@@ -37,17 +40,25 @@ export const createNewUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCreate(state) {
+      state.isCreaeSuccess = false;
+    },
+  },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchListUser.fulfilled, (state, action) => {
       // Add user to the state array
       state.listUser = action.payload;
     });
+    builder.addCase(createNewUser.fulfilled, (state, action) => {
+      // Add user to the state array
+      state.isCreaeSuccess = true;
+    });
   },
 });
 
 // Action creators are generated for each case reducer function
-// export const {} = userSlice.actions;
+export const { resetCreate } = userSlice.actions;
 
 export default userSlice.reducer;
