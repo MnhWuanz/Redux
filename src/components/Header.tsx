@@ -27,11 +27,9 @@ const Header = () => {
             <Form.Check // prettier-ignore
               type="switch"
               id="custom-switch"
-              value={modeState}
+              checked={modeState === 'dark'}
               onChange={(e) =>
-                dispatch(
-                  changeMode(e.target.value === 'light' ? 'dark' : 'light'),
-                )
+                dispatch(changeMode(e.target.checked ? 'dark' : 'light'))
               }
               label={
                 modeState === 'light' ? (
