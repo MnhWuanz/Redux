@@ -1,11 +1,14 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import { decrease, increment } from './redux/counter/counter.slice';
+import { useAppDispatch, useAppSelector } from './redux/hook';
+import Button from 'react-bootstrap/Button';
 function App() {
-  const [count, setCount] = useState(0)
+  // const count = useSelector((state: RootState) => state.counter);
+  const count = useAppSelector((state) => state.counter);
+  const dispatch = useAppDispatch();
 
+  console.log(count);
   return (
     <>
       <div>
@@ -16,20 +19,21 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="">
+        <h1>My current count = {count.value}</h1>
+        <Button variant="warning">Test boostrap</Button>
+        <div className="">
+          <button
+            className="btn btn-primary "
+            onClick={() => dispatch(increment())}
+          >
+            Increase{' '}
+          </button>
+          <button onClick={() => dispatch(decrease())}>Decrease </button>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
