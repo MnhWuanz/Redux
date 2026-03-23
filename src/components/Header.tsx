@@ -1,15 +1,23 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import { useAppSelector } from '../redux/hook';
+import { useAppDispatch, useAppSelector } from '../redux/hook';
 import Form from 'react-bootstrap/Form';
-import { useState } from 'react';
+import { changeMode } from '../redux/app/app.slice';
+import { useEffect } from 'react';
 
 const Header = () => {
   const users = useAppSelector((state) => state.user.listUser);
-  const [mode, setMode] = useState('light');
+  const dispatch = useAppDispatch();
+  const modeState = useAppSelector((state) => state.app.mode);
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (body) {
+      body.setAttribute('data-bs-theme', modeState);
+    }
+  }, [modeState]);
   return (
     <div>
-      <Navbar className="bg-body-tertiary" data-bs-theme={mode}>
+      <Navbar className="bg-body-tertiary" data-bs-theme={modeState}>
         <Container>
           <Navbar.Brand href="#home">
             Navbar with text {users.length}
@@ -19,12 +27,14 @@ const Header = () => {
             <Form.Check // prettier-ignore
               type="switch"
               id="custom-switch"
-              value={mode}
+              value={modeState}
               onChange={(e) =>
-                setMode(e.target.value === 'light' ? 'dark' : 'light')
+                dispatch(
+                  changeMode(e.target.value === 'light' ? 'dark' : 'light'),
+                )
               }
               label={
-                mode === 'light' ? (
+                modeState === 'light' ? (
                   <Navbar.Text>Light mode</Navbar.Text>
                 ) : (
                   <Navbar.Text>Dark mode</Navbar.Text>
