@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import { useAppDispatch, useAppSelector } from '../redux/hook';
 import { fetchListUser } from '../redux/user/user.slice';
+import { toast } from 'react-toastify';
 
 const UserTable = () => {
   const dispatch = useAppDispatch();
   const users = useAppSelector((state) => state.user.listUser);
   useEffect(() => {
     dispatch(fetchListUser());
+    toast.success('fetch success');
   }, [dispatch]);
   return (
     <Table striped bordered hover>

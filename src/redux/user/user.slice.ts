@@ -6,6 +6,7 @@ const initialState = {
 };
 export const fetchListUser = createAsyncThunk(
   'users/fetchListUser',
+  
   async (userId, thunkAPI) => {
     const response = await fetch('http://localhost:8000/users');
     const data = await response.json();
