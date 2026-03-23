@@ -62,8 +62,8 @@ const UserTable = () => {
           return (
             <tr key={user.id}>
               <td>{user.id}</td>
-              <td>{user.email}</td>
               <td>{user.name}</td>
+              <td>{user.email}</td>
               <td className="d-flex gap-3">
                 <Button
                   variant="warning"

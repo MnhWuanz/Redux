@@ -7,7 +7,7 @@ const initialState = {
 };
 export const fetchListUser = createAsyncThunk(
   'users/fetchListUser',
-  async (userId, thunkAPI) => {
+  async () => {
     const response = await fetch('http://localhost:8000/users');
 
     const data = await response.json();
@@ -36,6 +36,42 @@ export const createNewUser = createAsyncThunk(
     return data as TUSER[];
   },
 );
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async (payload: TUSER, thunkAPI) => {
+    const response = await fetch(`http://localhost:8000/users/${payload.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        email: payload.email,
+        name: payload.name,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data && data.id) {
+      thunkAPI.dispatch(fetchListUser());
+    }
+    return data as TUSER[];
+  },
+);
+export const deleteUser = createAsyncThunk(
+  'users/updateUser',
+  async (payload: TUSER, thunkAPI) => {
+    const response = await fetch(`http://localhost:8000/users/${payload.id}`, {
+      method: 'Delete',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data) {
+      thunkAPI.dispatch(fetchListUser());
+    }
+    return data as TUSER[];
+  },
+);
 
 export const userSlice = createSlice({
   name: 'user',
@@ -51,7 +87,7 @@ export const userSlice = createSlice({
       // Add user to the state array
       state.listUser = action.payload;
     });
-    builder.addCase(createNewUser.fulfilled, (state, action) => {
+    builder.addCase(createNewUser.fulfilled, (state) => {
       // Add user to the state array
       state.isCreaeSuccess = true;
     });

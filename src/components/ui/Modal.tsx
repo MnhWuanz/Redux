@@ -5,7 +5,11 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { TUSER } from '../../types/typeUser';
 import { useAppDispatch } from '../../redux/hook';
-import { createNewUser } from '../../redux/user/user.slice';
+import {
+  createNewUser,
+  deleteUser,
+  updateUser,
+} from '../../redux/user/user.slice';
 import { toast } from 'react-toastify';
 
 type TProp = {
@@ -27,15 +31,30 @@ const MyModal: React.FC<TProp> = ({
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as {
-      name: string;
-      email: string;
+    const dataRaw = Object.fromEntries(formData.entries()) as any;
+    const data: TUSER = {
+      ...dataRaw,
+      id: dataRaw.id ? Number(dataRaw.id) : undefined,
     };
     console.log(data);
     if (isDelete) {
+      try {
+        await dispatch(deleteUser(data)).unwrap();
+        toast.success('Delete user success');
+        handleClose();
+      } catch {
+        toast.error('delete user faill !!!');
+      }
       return;
     }
     if (isEdit) {
+      try {
+        await dispatch(updateUser(data)).unwrap();
+        toast.success('Update user success');
+        handleClose();
+      } catch {
+        toast.error('Update user faill !!!');
+      }
       return;
     }
     try {
