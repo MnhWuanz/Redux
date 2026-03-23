@@ -6,10 +6,30 @@ const initialState = {
 };
 export const fetchListUser = createAsyncThunk(
   'users/fetchListUser',
-  
   async (userId, thunkAPI) => {
     const response = await fetch('http://localhost:8000/users');
+
     const data = await response.json();
+    return data as TUSER[];
+  },
+);
+interface IUserPayload {
+  name: string;
+  email: string;
+}
+export const createNewUser = createAsyncThunk(
+  'users/createNewUser',
+
+  async (payload: IUserPayload, thunkAPI) => {
+    const response = await fetch('http://localhost:8000/users', {
+      method: 'Post',
+      body: JSON.stringify({ ...payload }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    console.log('Check data res:', data);
     return data as TUSER[];
   },
 );

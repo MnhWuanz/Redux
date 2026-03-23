@@ -4,6 +4,8 @@ import Modal from 'react-bootstrap/Modal'; // Đây là Modal của thư viện
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { TUSER } from '../../types/typeUser';
+import { useAppDispatch } from '../../redux/hook';
+import { createNewUser } from '../../redux/user/user.slice';
 
 type TProp = {
   user?: TUSER;
@@ -19,11 +21,22 @@ const MyModal: React.FC<TProp> = ({
   user,
   isDelete,
 }) => {
+  const dispatch = useAppDispatch();
   const handelSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(formData.entries()) as {
+      name: string;
+      email: string;
+    };
     console.log(data);
+    if (isDelete) {
+      return;
+    }
+    if (isEdit) {
+      return;
+    }
+    dispatch(createNewUser(data));
   };
   let title = 'Add new user';
   let contentBtn = 'Sign in';
