@@ -3,7 +3,9 @@ import Tabs from 'react-bootstrap/Tabs';
 import UserTable from './UserTable';
 import { Button } from 'react-bootstrap';
 import { useState } from 'react';
-import MyModal from './ui/Modal';
+import MyModal from './ui/Modal/ModalUser';
+import ModalBlog from './ui/Modal/ModalBlog';
+import BlogTable from './BlogTable';
 const TabContent = () => {
   const [show, setShow] = useState(false);
 
@@ -25,7 +27,14 @@ const TabContent = () => {
         <UserTable />
       </Tab>
       <Tab eventKey="blog" title="Blogs">
-        Tab content for Profile
+        <div className="container d-flex justify-content-between mb-3">
+          <h2>Table Blogs</h2>
+          <Button variant="primary" onClick={() => setShow(true)}>
+            Add New
+          </Button>
+          <ModalBlog isOpen={show} handleClose={handleCloseModal} />
+        </div>
+        <BlogTable />
       </Tab>
     </Tabs>
   );

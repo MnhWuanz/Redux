@@ -15,10 +15,12 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from './user/user.slice';
 import appReducer from './app/app.slice';
 import { combineReducers } from '@reduxjs/toolkit';
+import blogReducer from './blog/blog.slice';
 const rootReducer = combineReducers({
   counter: counterReducer,
   user: userReducer,
   app: appReducer,
+  blog: blogReducer,
 });
 const persistConfig = {
   key: 'root',

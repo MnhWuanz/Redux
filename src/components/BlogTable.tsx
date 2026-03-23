@@ -1,79 +1,83 @@
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { useAppDispatch, useAppSelector } from '../redux/hook';
-import { fetchListUser } from '../redux/user/user.slice';
+
 import { toast } from 'react-toastify';
 import { Button } from 'react-bootstrap';
-import MyModal from './ui/Modal/ModalUser';
-import { TUSER } from '../types/typeUser';
+import { TBLOG } from '../types/typeBlog';
+import ModalBlog from './ui/Modal/ModalBlog';
+import { fetchListBlog } from '../redux/blog/blog.slice';
 
-const UserTable = () => {
+const BlogTable = () => {
   const dispatch = useAppDispatch();
-  const users = useAppSelector((state) => state.user.listUser);
+  const blogs = useAppSelector((state) => state.blog.listBlog);
+  const [show, setShow] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [blog, setBlog] = useState<TBLOG>();
+
   useEffect(() => {
-    dispatch(fetchListUser());
-    toast.success('fetch success');
+    dispatch(fetchListBlog());
+    toast.success('fetch blog success');
   }, [dispatch]);
-  const searchUser = (id: number) => {
-    const userFillter = users.find((data) => data.id === id);
-    setUser(userFillter);
+  const searchBlog = (id: number) => {
+    const blogFillter = blogs.find((data) => data.id === id);
+    setBlog(blogFillter);
   };
   const openEdit = (id: number) => {
-    searchUser(id);
+    searchBlog(id);
     setEdit(true);
     setShow(true);
   };
   const openDelete = (id: number) => {
-    searchUser(id);
+    searchBlog(id);
     setIsDelete(true);
     setShow(true);
   };
-  const [show, setShow] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
-  const [user, setUser] = useState<TUSER>();
 
   const handleCloseModal = () => {
     setShow(false);
     setEdit(false);
     setIsDelete(false);
-    setUser(undefined);
+    setBlog(undefined);
   };
   return (
     <Table striped bordered hover>
-      <MyModal
+      <ModalBlog
         isOpen={show}
         handleClose={handleCloseModal}
         isEdit={edit}
         isDelete={isDelete}
-        user={user}
+        blog={blog}
       />
 
       <thead>
         <tr>
           <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Content</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {users.map((user) => {
+        {blogs.map((blog) => {
           return (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
+            <tr key={blog.id}>
+              <td>{blog.id}</td>
+              <td>{blog.title}</td>
+              <td>{blog.author}</td>
+              <td>{blog.content}</td>
               <td className="d-flex gap-3">
                 <Button
                   variant="warning"
                   onClick={() => {
-                    openEdit(user.id);
+                    openEdit(blog.id);
                   }}
                 >
                   Edit
                 </Button>
-                <Button variant="danger" onClick={() => openDelete(user.id)}>
+                <Button variant="danger" onClick={() => openDelete(blog.id)}>
                   Delete
                 </Button>
               </td>
@@ -85,4 +89,4 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+export default BlogTable;

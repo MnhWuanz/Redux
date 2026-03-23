@@ -3,13 +3,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'; // Đây là Modal của thư viện
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { TUSER } from '../../types/typeUser';
-import { useAppDispatch } from '../../redux/hook';
+import { TUSER } from '../../../types/typeUser';
+import { useAppDispatch } from '../../../redux/hook';
 import {
   createNewUser,
   deleteUser,
   updateUser,
-} from '../../redux/user/user.slice';
+} from '../../../redux/user/user.slice';
 import { toast } from 'react-toastify';
 
 type TProp = {
